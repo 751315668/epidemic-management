@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epidemicmanagement.dao.SupplyDao">
+
+    <resultMap id="supplyInfoMap" type="com.epidemicmanagement.entity.SupplyTakeInfo">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="vol_id" property="volId" jdbcType="INTEGER" />
+        <result column="sup_id" property="supId" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="cnt" property="cnt" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="getTakeInfoList" resultMap="supplyInfoMap">
+        select * from vol_sup_rel where sup_id = #{id}
+    </select>
+
+    <insert id="insertSupplyVolRel">
+        insert into vol_sup_rel (vol_id, sup_id, cnt) values(#{volId}, #{supplyId}, #{quantity})
+    </insert>
+
+</mapper>

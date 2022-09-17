@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epidemicmanagement.dao.TaskDao">
+
+    <resultMap id="relMap" type="com.epidemicmanagement.entity.Task">
+        <id column="t_id" property="id" jdbcType="INTEGER"/>
+        <result column="t_name" property="name" jdbcType="VARCHAR"/>
+        <collection property="volunteerList" ofType="com.epidemicmanagement.entity.Volunteer">
+            <id column="v_id" property="id" jdbcType="INTEGER"/>
+            <result column="v_name" property="name" jdbcType="VARCHAR"/>
+            <result column="age" property="age" jdbcType="INTEGER"/>
+            <result column="sex" property="sex" jdbcType="VARCHAR"/>
+            <result column="phone" property="phone" jdbcType="VARCHAR"/>
+            <result column="detailed_address" property="detailedAddress" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insertTaskVolRel">
+        insert into task_vol_rel (task_id, vol_id) values(#{taskId}, #{volId})
+    </insert>
+
+    <select id="getParticipantList" resultMap="relMap">
+        select t.id t_id, t.name t_name, v.id v_id,v.name v_name, v.age, v.sex, v.phone, v.detailed_address, rel.task_id, rel.vol_id
+        from task t inner join task_vol_rel rel on t.id = rel.task_id
+        inner join volunteer v on rel.vol_id = v.id
+        <where>
+            <if test="id != null">
+                t.id = #{id}
+            </if>
+        </where>
+    </select>
+
+</mapper>
